@@ -29,13 +29,13 @@
 ### 1. イメージをビルド
 
 ```bash
-podman build -t ndlocr-lite-immich-adapter .
+podman build -t ghcr.io/melon-cream/ndlocr-lite-immich-adapter:latest .
 ```
 
 ### 2. アダプタを起動
 
 ```bash
-podman run --rm -p 3003:3003 ndlocr-lite-immich-adapter
+podman run --rm -p 3003:3003 ghcr.io/melon-cream/ndlocr-lite-immich-adapter:latest
 ```
 
 初回起動時には `ndlocr-lite` を upstream から直接取得し、`/opt/ndlocr-lite-venv` に専用 virtualenv を作って依存パッケージを導入します。

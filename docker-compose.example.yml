@@ -1,6 +1,6 @@
 services:
   ndlocr-lite-immich-adapter:
-    image: ghcr.io/Melon-cream/ndlocr-lite-immich-adapter:latest
+    image: ghcr.io/melon-cream/ndlocr-lite-immich-adapter:latest
     container_name: ndlocr-lite-immich-adapter
     ports:
       - "3003:3003"

@@ -29,13 +29,13 @@ The published container image does not bundle `ndlocr-lite`. It bootstraps the u
 ### 1. Build the container
 
 ```bash
-podman build -t ndlocr-lite-immich-adapter .
+podman build -t ghcr.io/melon-cream/ndlocr-lite-immich-adapter:latest .
 ```
 
 ### 2. Run the adapter
 
 ```bash
-podman run --rm -p 3003:3003 ndlocr-lite-immich-adapter
+podman run --rm -p 3003:3003 ghcr.io/melon-cream/ndlocr-lite-immich-adapter:latest
 ```
 
 On the first start, the container downloads `ndlocr-lite` directly from the upstream repository, creates a dedicated virtual environment under `/opt/ndlocr-lite-venv`, and installs the upstream runtime dependencies there.
