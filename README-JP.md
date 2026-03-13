@@ -26,16 +26,16 @@
 
 ## クイックスタート
 
-### 1. イメージをビルド
+### 1. 公開イメージを取得
 
 ```bash
-podman build -t ghcr.io/melon-cream/ndlocr-lite-immich-adapter:latest .
+docker pull ghcr.io/melon-cream/ndlocr-lite-immich-adapter:latest
 ```
 
 ### 2. アダプタを起動
 
 ```bash
-podman run --rm -p 3003:3003 ghcr.io/melon-cream/ndlocr-lite-immich-adapter:latest
+docker run --rm -p 3003:3003 ghcr.io/melon-cream/ndlocr-lite-immich-adapter:latest
 ```
 
 初回起動時には `ndlocr-lite` を upstream から直接取得し、`/opt/ndlocr-lite-venv` に専用 virtualenv を作って依存パッケージを導入します。
