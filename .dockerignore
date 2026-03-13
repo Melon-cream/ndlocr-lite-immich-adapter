@@ -1,0 +1,16 @@
+.git
+.github
+.docs
+.gitignore
+.env.example
+.pytest_cache
+.ruff_cache
+.uv-cache
+.venv
+__pycache__
+**/__pycache__/
+*.py[cod]
+tests
+immich
+docker-compose.example.yml
+uv.lock
