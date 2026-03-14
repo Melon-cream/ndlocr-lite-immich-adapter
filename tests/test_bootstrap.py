@@ -137,9 +137,7 @@ def test_bootstrap_accepts_python_from_path(tmp_path: Path, monkeypatch: pytest.
     assert calls == [["python3", "-m", "pip", "install", "--no-cache-dir", "-r", str(requirements_path)]]
 
 
-def test_bootstrap_clones_without_tempdir_under_source_parent(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_bootstrap_clones_without_tempdir_under_source_parent(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     source_dir = tmp_path / "restricted" / "ndlocr-lite"
     venv_dir = tmp_path / "venv"
     bootstrap_python = "/usr/bin/python3"
