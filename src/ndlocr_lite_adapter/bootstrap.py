@@ -71,7 +71,7 @@ def _clone_upstream(settings: Settings, source_dir: Path) -> None:
         "Bootstrapping NDLOCR-Lite from upstream",
         extra={"repo": settings.ndl_ocr_lite_repo, "ref": settings.ndl_ocr_lite_ref},
     )
-    with tempfile.TemporaryDirectory(prefix="ndlocr-lite-bootstrap-", dir=source_dir.parent) as tmp_dir:
+    with tempfile.TemporaryDirectory(prefix="ndlocr-lite-bootstrap-") as tmp_dir:
         checkout_dir = Path(tmp_dir) / "repo"
         _run(
             [

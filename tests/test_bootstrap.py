@@ -137,6 +137,53 @@ def test_bootstrap_accepts_python_from_path(tmp_path: Path, monkeypatch: pytest.
     assert calls == [["python3", "-m", "pip", "install", "--no-cache-dir", "-r", str(requirements_path)]]
 
 
+def test_bootstrap_clones_without_tempdir_under_source_parent(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    source_dir = tmp_path / "restricted" / "ndlocr-lite"
+    venv_dir = tmp_path / "venv"
+    bootstrap_python = "/usr/bin/python3"
+    temporary_dirs: list[str | None] = []
+
+    class FakeTemporaryDirectory:
+        def __init__(self, *, prefix: str, dir: str | None = None) -> None:
+            temporary_dirs.append(dir)
+            self.path = tmp_path / "tmp-bootstrap"
+            self.path.mkdir(exist_ok=True)
+
+        def __enter__(self) -> str:
+            return str(self.path)
+
+        def __exit__(self, exc_type: object, exc: object, tb: object) -> None:
+            return None
+
+    def fake_run(command: list[str], description: str, *, timeout: int) -> None:
+        if command[:2] == ["git", "clone"]:
+            checkout_dir = Path(command[-1])
+            script_path = checkout_dir / "src" / "ocr.py"
+            script_path.parent.mkdir(parents=True)
+            script_path.write_text("print('ok')", encoding="utf-8")
+            (checkout_dir / "requirements.txt").write_text("pillow\n", encoding="utf-8")
+            return
+        if command[-3:] == ["-m", "venv", str(venv_dir)]:
+            python_path = venv_dir / "bin" / "python"
+            python_path.parent.mkdir(parents=True)
+            python_path.write_text("", encoding="utf-8")
+
+    monkeypatch.setattr("ndlocr_lite_adapter.bootstrap.tempfile.TemporaryDirectory", FakeTemporaryDirectory)
+    monkeypatch.setattr("ndlocr_lite_adapter.bootstrap._run", fake_run)
+    settings = Settings(
+        NDL_OCR_LITE_DIR=str(source_dir),
+        NDL_OCR_LITE_VENV_DIR=str(venv_dir),
+        NDL_OCR_LITE_BOOTSTRAP_PYTHON=bootstrap_python,
+    )
+
+    ensure_ndl_ocr_lite_runtime(settings)
+
+    assert temporary_dirs == [None]
+    assert source_dir.exists()
+
+
 def _bootstrap_state_text(repo: str, ref: str, requirements_path: Path) -> str:
     requirements_hash = hashlib.sha256(requirements_path.read_bytes()).hexdigest()
     return f"{repo}@{ref}:{requirements_hash}"

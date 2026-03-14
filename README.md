@@ -40,6 +40,8 @@ docker run --rm -p 3003:3003 ghcr.io/melon-cream/ndlocr-lite-immich-adapter:late
 
 On the first start, the container downloads `ndlocr-lite` directly from the upstream repository, creates a dedicated virtual environment under `/opt/ndlocr-lite-venv`, and installs the upstream runtime dependencies there.
 
+The image pre-creates `/opt/ndlocr-lite` and `/opt/ndlocr-lite-venv` with writable permissions, so a Compose service with `user: "<uid>:<gid>"` can bootstrap into fresh named volumes without running as root.
+
 ### 3. Point Immich to the adapter
 
 Set the Immich machine-learning URL to:
@@ -53,6 +55,8 @@ If you use a standalone container, replace the hostname with the container or ho
 ## Compose Example
 
 Use [`docker-compose.example.yml`](https://github.com/Melon-cream/ndlocr-lite-immich-adapter/blob/main/docker-compose.example.yml) as a starting point. The service exposes port `3003`, which matches Immich's default machine-learning port, and mounts named volumes so the upstream checkout and virtual environment survive container recreation.
+
+If those named volumes were created by an older root-owned container, switching to non-root later can still fail. Recreate the volumes or adjust their ownership before reusing them with `user:`.
 
 ## Environment Variables
 

@@ -40,6 +40,8 @@ docker run --rm -p 3003:3003 ghcr.io/melon-cream/ndlocr-lite-immich-adapter:late
 
 初回起動時には `ndlocr-lite` を upstream から直接取得し、`/opt/ndlocr-lite-venv` に専用 virtualenv を作って依存パッケージを導入します。
 
+イメージは `/opt/ndlocr-lite` と `/opt/ndlocr-lite-venv` を事前作成し、書き込み可能な権限で保持するため、Compose で `user: "<uid>:<gid>"` を指定しても新規 named volume なら root なしで bootstrap できます。
+
 ### 3. Immich 側 URL を差し替え
 
 Immich の machine-learning URL に次を設定します。
@@ -53,6 +55,8 @@ http://ndlocr-lite-immich-adapter:3003
 ## Compose 利用例
 
 [`docker-compose.example.yml`](https://github.com/Melon-cream/ndlocr-lite-immich-adapter/blob/main/docker-compose.example.yml) をベースにしてください。サービスは `3003` を公開し、container 再作成後も upstream checkout と virtualenv を再利用できるよう named volume を使います。
+
+ただし、以前の root 実行で作られた named volume は所有者がそのまま残るため、nonroot に切り替える場合は volume の作り直しか所有権調整が必要です。
 
 ## 環境変数
 

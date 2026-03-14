@@ -25,6 +25,9 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends git libglib2.0-0 libgl1 \
     && rm -rf /var/lib/apt/lists/*
 
+RUN mkdir -p /opt/ndlocr-lite /opt/ndlocr-lite-venv \
+    && chmod 0777 /opt/ndlocr-lite /opt/ndlocr-lite-venv
+
 COPY pyproject.toml README.md README-JP.md CHANGELOG.md CHANGELOG-JP.md NOTICE.md THIRD_PARTY_LICENSES.md LICENSE /app/
 COPY src /app/src
 
